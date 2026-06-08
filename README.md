@@ -2,6 +2,8 @@
 
 A matrix class built from scratch in Python, with no external dependencies. I wrote this while working through Justin Skycak's "Introduction to Algorithms and Machine Learning" to understand linear algebra through implementation rather than just theory.
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+
 ## What it does
 
 - Matrix addition, subtraction, scalar multiplication, and matrix multiplication
