@@ -20,9 +20,8 @@ class Matrix:
     def __str__(self):
         return str(self._matrix)
 
-    def __getitem__(self, key):
-        row, col = key
-        return self._matrix[row][col]
+    def __getitem__(self, index):
+        return self._matrix[index]
 
     # returns # of rows
     def __len__(self):
