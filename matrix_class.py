@@ -1,81 +1,96 @@
 class Matrix:
 
     def __init__(self, arr):
-        self.matrix = arr
+        # underscore indicates that this variable isn't mean't 
+        # to be accessed outside the class.
+        self._matrix = arr
 
+        # check if any row is of a different length
         for i in range(1,len(arr)):
             if len(arr[0]) != len(arr[i]):
-                raise TypeError(
-                    "Each row must have an equal number of columns")
+                raise TypeError("Each row must have an equal number of columns")
 
-        self.num_row = len(arr)
-        self.num_col = len(arr[0])
+        self._numRows = len(arr)
+        self._numCols = len(arr[0])
 
-    def show(self):
-        for row in self.matrix:
-            print(row)
+    # display
+    def __repr__(self):
+        return str(self._matrix)
+        
+    def __str__(self):
+        return str(self._matrix)
+
+    def __getitem__(self, key):
+        row, col = key
+        return self._matrix[row][col]
+
+    # returns # of rows
+    def __len__(self):
+        return len(self._matrix)
 
     def transpose(self):
         place_holder_matrix = []
 
-        for i in range(self.num_col):
+        for i in range(self._numCols):
             place_holder_row = []
-            for j in range(self.num_row):
-                place_holder_row.append(self.matrix[j][i])
+            for j in range(self._numRows):
+                place_holder_row.append(self._matrix[j][i])
             place_holder_matrix.append(place_holder_row)
 
-        self.matrix = place_holder_matrix
-        self.num_row, self.num_col = self.num_col, self.num_row
+        self._matrix = place_holder_matrix
+        self._numRows, self._numCols = self._numCols, self._numRows
         return self
 
-    def add(self, other_arr):
+    def __add__(self, other_arr):
 
-        if self.num_row != other_arr.num_row or self.num_col != other_arr.num_col:
+        if self._numRows != other_arr._numRows or self._numCols != other_arr._numCols:
             raise TypeError(
                 "You cannot add/subtract matrices of differing dimensions.")
 
-        for i in range(self.num_row):
-            for j in range(self.num_col):
-                self.matrix[i][j] += other_arr.matrix[i][j]
+        for i in range(self._numRows):
+            for j in range(self._numCols):
+                self._matrix[i][j] += other_arr._matrix[i][j]
         return self
 
-    def subtract(self, other_arr):
+    def __sub__(self, other_arr):
 
-        self.add(other_arr.scalar_multiply(-1))
+        self.__add__(other_arr.scalar_multiply(-1))
         return self
 
-    def scalar_multiply(self, scalar):
+    def __mul__(self, other):
 
-        for i in range(self.num_row):
-            for j in range(self.num_col):
-                self.matrix[i][j] *= scalar
-        return self
-
-    def matrix_multiply(self, other_arr):
-        if self.num_col != other_arr.num_row:
-            raise TypeError(
-                "The number of columns in the first matrix must equal the number of rows in the second!")
-        else:
-            other_arr.transpose()
-            resultant_matrix = []
-            for i in range(self.num_row):
-                row_matrix = []
-                for j in range(other_arr.num_col):
-                    row_matrix.append(dot_product(
-                        self.matrix[i], other_arr.matrix[j]))
-                resultant_matrix.append(row_matrix)
-
-            other_arr.transpose()
-
-            self.matrix = resultant_matrix
+        if type(other) == int or type(other) == float:
+            for i in range(self._numRows):
+                for j in range(self._numCols):
+                    self.matrix[i][j] *= other
             return self
+        elif type(other) == Matrix:
+            if self._numCols != other._numRows:
+                raise TypeError(
+                    "The number of columns in the first matrix must equal the number of rows in the second!")
+            else:
+                other.transpose()
+                resultant_matrix = []
+                for i in range(self._numRows):
+                    row_matrix = []
+                    for j in range(other._numCols):
+                        row_matrix.append(dot_product(
+                            self._matrix[i], other._matrix[j]))
+                    resultant_matrix.append(row_matrix)
+
+                other.transpose()
+
+                self._matrix = resultant_matrix
+                return self
+        else:
+            raise TypeError("You can only multiply by either another Matrix or number")
 
     def recursive_determinant(self):
-        if self.num_col != self.num_row:
+        if self._numCols != self._numRows:
             raise TypeError(
                 "Rows and Columns must be equal to take the determinant")
         else:
-            return calculate_determinant(self.matrix)
+            return calculate_determinant(self._matrix)
         
     def reduced_row_echelon_form(self):
         self.matrix = reduced_row_echelon_form_helper(self.matrix)
