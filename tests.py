@@ -9,6 +9,9 @@ matrix2 = matrix1
 
 matrix3 = matrix1 + matrix2
 
+matrix3 = matrix1 * matrix2
+
 print(matrix3)
-print(matrix3[1][2])
-print(matrix3[:2][:1])
+
+for row in matrix3:
+    print(row)

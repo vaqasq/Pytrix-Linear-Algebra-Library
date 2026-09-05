@@ -13,12 +13,13 @@ class Matrix:
         self._numRows = len(arr)
         self._numCols = len(arr[0])
 
-    # display
+    # display, __str__ will default to this
     def __repr__(self):
-        return str(self._matrix)
-        
-    def __str__(self):
-        return str(self._matrix)
+        returnString = ""
+        for row in self._matrix:
+            returnString += str(row) + "\n"
+        return returnString
+ 
 
     def __getitem__(self, index):
         return self._matrix[index]
@@ -61,7 +62,7 @@ class Matrix:
         if type(other) == int or type(other) == float:
             for i in range(self._numRows):
                 for j in range(self._numCols):
-                    self.matrix[i][j] *= other
+                    self._matrix[i][j] *= other
             return self
         elif type(other) == Matrix:
             if self._numCols != other._numRows:
@@ -92,15 +93,15 @@ class Matrix:
             return calculate_determinant(self._matrix)
         
     def reduced_row_echelon_form(self):
-        self.matrix = reduced_row_echelon_form_helper(self.matrix)
+        self._matrix = reduced_row_echelon_form_helper(self._matrix)
         return self
     
     def inverse_matrix_via_rref(self):
-        self.matrix = inverse_matrix_via_rref(self.matrix)
+        self._matrix = inverse_matrix_via_rref(self._matrix)
         return self
     
     def determinant_via_rref(self):
-        return determinant_via_rref(self.matrix)
+        return determinant_via_rref(self._matrix)
 
 
 def dot_product(arr1, arr2):
